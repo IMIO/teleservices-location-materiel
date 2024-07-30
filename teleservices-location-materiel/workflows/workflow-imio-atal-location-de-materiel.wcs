@@ -1,0 +1,449 @@
+<?xml version="1.0"?>
+<workflow id="43" url="">
+  <name>iMio - Atal - Location de mat&#233;riel</name>
+  <slug>location-de-materiel</slug>
+  <category slug="imio-atal" category_id="1">iMio - Atal</category>
+  <roles>
+    <role id="_receiver">Destinataire</role>
+  </roles><possible_status>
+    <status>
+      <id>1</id>
+      <name>Juste envoy&#233;</name>
+      <colour>#999999</colour>
+      <visibility>
+        <role>__restricted__</role>
+      </visibility><items>
+        <item type="set-backoffice-fields" id="1">
+          <label>Initialisation compteur</label>
+          <fields>
+            <field>
+              <field_id>bo60ebf4b2-7ee3-4047-8eb9-a0c8519be73c</field_id>
+              <value>{{ 0 }}</value>
+            </field>
+          </fields>
+        </item><item type="sendmail" id="2">
+          <to>
+            <item role_id="_receiver">_receiver</item>
+          </to><subject>Nouvelle demande ({{ form_name }})</subject>
+          <body>Bonjour,
+
+Une nouvelle demande a &#233;t&#233; re&#231;ue, vous pouvez la consulter
+en suivant ce lien :
+  {{ form_url_backoffice }}
+
+{% if form_details %}
+Pour r&#233;f&#233;rence, voici le d&#233;tail de la demande :
+
+{{ form_details }}
+{% endif %}
+</body>
+        </item><item type="sendmail" id="3">
+          <to>
+            <item role_id="_submitter">_submitter</item>
+          </to><subject>Nouvelle demande ({{ form_name }})</subject>
+          <body>Bonjour,
+
+Ce message est un rappel concernant la demande que vous venez d&#8217;envoyer.
+{% if form_user %}
+Vous pouvez la consulter en suivant ce lien : {{ form_url }}
+{% endif %}
+
+{% if form_details %}
+Pour r&#233;f&#233;rence, voici le d&#233;tail de la demande :
+
+{{ form_details }}
+{% endif %}
+</body>
+        </item><item type="jump" id="4">
+          <status>5</status>
+          <mode>immediate</mode>
+          <set_marker_on_status>False</set_marker_on_status>
+        </item>
+      </items>
+    </status><status>
+      <id>5</id>
+      <name>Vers demande d'&#233;v&#232;nement</name>
+      <colour>#999999</colour>
+      <visibility>
+        <role>__restricted__</role>
+      </visibility><items>
+        <item type="external_workflow_global_action" id="1">
+          <slug>formdef:demande-d-organisation-d-evenement-a-charleroi-phase-3</slug>
+          <trigger_id>action:info_location_materiel</trigger_id>
+          <target_mode>all</target_mode>
+        </item><item type="redirect_to_url" id="2">
+          <url>{% if not is_in_backoffice %}{{form_parent_form_url}}{% endif %}{% if is_in_backoffice %}{{form_parent_form_backoffice_url}}{% endif %}</url>
+        </item><item type="jump" id="3">
+          <status>6</status>
+          <mode>immediate</mode>
+          <set_marker_on_status>False</set_marker_on_status>
+        </item>
+      </items>
+    </status><status>
+      <id>6</id>
+      <name>En attente de validation</name>
+      <colour>#0099FF</colour>
+      <visibility />
+      <items>
+        <item type="editable" id="1">
+          <by>
+            <item role_id="_receiver">_receiver</item>
+          </by><status>1</status>
+          <operation_mode>full</operation_mode>
+          <set_marker_on_status>False</set_marker_on_status>
+        </item>
+      </items>
+    </status><status>
+      <id>3</id>
+      <name>Boucle</name>
+      <colour>#999999</colour>
+      <visibility>
+        <role>__restricted__</role>
+      </visibility><items>
+        <item type="jump" id="1">
+          <status>2</status>
+          <condition>
+            <type>django</type>
+            <value>form_var_compteur|add:0 &lt; form_var_blc_materiel_raw_data|length</value>
+          </condition><mode>immediate</mode>
+          <set_marker_on_status>False</set_marker_on_status>
+        </item><item type="jump" id="2">
+          <status>4</status>
+          <condition>
+            <type>django</type>
+            <value>form_var_compteur|add:0 &gt;= form_var_blc_materiel_raw_data|length</value>
+          </condition><mode>immediate</mode>
+          <set_marker_on_status>False</set_marker_on_status>
+        </item>
+      </items>
+    </status><status>
+      <id>2</id>
+      <name>Enregistrement dans atal</name>
+      <colour>#999999</colour>
+      <visibility>
+        <role>__restricted__</role>
+      </visibility><items>
+        <item type="set-backoffice-fields" id="1">
+          <label>Dates et heures</label>
+          <fields>
+            <field>
+              <field_id>bo7ddbfdb3-b427-4ead-b5a2-b8812ea1477c</field_id>
+              <value>{{ form_var_blc_materiel_raw_data|get:form_var_compteur|get:form_option_uuid_date_debut|date:"Y-m-d" }}</value>
+            </field><field>
+              <field_id>boe5cdd6a9-3220-41b0-87fc-e44d3a7fb483</field_id>
+              <value>{{ form_var_blc_materiel_raw_data|get:form_var_compteur|get:form_option_uuid_date_fin|date:"Y-m-d" }}</value>
+            </field><field>
+              <field_id>bo54d3891a-fff8-409a-a7e1-c5fcfe76dbc7</field_id>
+              <value>{{ form_var_blc_materiel_raw_data|get:form_var_compteur|get:form_option_uuid_heure_debut }}</value>
+            </field><field>
+              <field_id>bo5f9dd008-c346-4c55-8f4a-975d7d9a89bd</field_id>
+              <value>{{ form_var_blc_materiel_raw_data|get:form_var_compteur|get:form_option_uuid_heure_fin }}</value>
+            </field>
+          </fields>
+        </item><item type="set-backoffice-fields" id="2">
+          <label>Materiel</label>
+          <fields>
+            <field>
+              <field_id>bo6f942bcb-f179-4d3a-8627-cd6a42c5d6b8</field_id>
+              <value>{{ form_var_blc_materiel_raw_data|get:form_var_compteur|get:form_option_uuid_materiel }}</value>
+            </field><field>
+              <field_id>bo72350186-108e-4b05-b7fb-1d093218eb2c</field_id>
+              <value>{{ form_var_blc_materiel_raw_data|get:form_var_compteur|get:form_option_uuid_quantite }}</value>
+            </field>
+          </fields>
+        </item><item type="set-backoffice-fields" id="3">
+          <label>Compteur</label>
+          <fields>
+            <field>
+              <field_id>bo60ebf4b2-7ee3-4047-8eb9-a0c8519be73c</field_id>
+              <value>{{ form_var_compteur|add:1 }}</value>
+            </field>
+          </fields>
+        </item><item type="webservice_call" id="4">
+          <method>GET</method>
+          <url>{{ passerelle_url }}passerelle-imio-ia-tech/connecteur_ia_tech/post-reservation-materiel</url>
+          <qs_data>
+            <item>
+              <name>date_debut</name>
+              <value>{{ form_var_wf_date_debut }}</value>
+            </item><item>
+              <name>date_fin</name>
+              <value>{{ form_var_wf_date_fin }}</value>
+            </item><item>
+              <name>heure_debut</name>
+              <value>{{ form_var_wf_heure_debut }}</value>
+            </item><item>
+              <name>heure_fin</name>
+              <value>{{ form_var_wf_heure_fin }}</value>
+            </item><item>
+              <name>material</name>
+              <value>{{ form_var_wf_id_materiel }}</value>
+            </item><item>
+              <name>id_tier</name>
+              <value>63</value>
+            </item><item>
+              <name>quantity</name>
+              <value>{{ form_var_wf_quantite }}</value>
+            </item>
+          </qs_data><post>False</post>
+          <response_type>json</response_type>
+          <varname>test_location</varname>
+          <store_all_responses>False</store_all_responses>
+          <attach_file_to_history>True</attach_file_to_history>
+          <action_on_app_error>:pass</action_on_app_error>
+          <action_on_4xx>:stop</action_on_4xx>
+          <action_on_5xx>:stop</action_on_5xx>
+          <action_on_bad_data>:pass</action_on_bad_data>
+          <action_on_network_errors>:stop</action_on_network_errors>
+          <record_errors>True</record_errors>
+          <record_on_errors>True</record_on_errors>
+          <notify_on_errors>False</notify_on_errors>
+          <set_marker_on_status>False</set_marker_on_status>
+        </item><item type="jump" id="5">
+          <status>3</status>
+          <mode>immediate</mode>
+          <set_marker_on_status>False</set_marker_on_status>
+        </item>
+      </items>
+    </status><status>
+      <id>4</id>
+      <name>Demande valid&#233;e</name>
+      <colour>#00FF00</colour>
+      <visibility />
+      <items />
+    </status><status>
+      <id>7</id>
+      <name>Demande refus&#233;e</name>
+      <colour>#FF0000</colour>
+      <visibility />
+      <items>
+        <item type="sendmail" id="1">
+          <to>
+            <item role_id="_receiver">_receiver</item>
+          </to>
+        </item><item type="sendmail" id="2">
+          <to>
+            <item role_id="_receiver">_receiver</item>
+          </to>
+        </item>
+      </items>
+    </status><status>
+      <id>8</id>
+      <name>Demande annul&#233;e</name>
+      <colour>#FF0000</colour>
+      <visibility />
+      <items>
+        <item type="sendmail" id="1">
+          <to>
+            <item role_id="_receiver">_receiver</item>
+          </to>
+        </item><item type="sendmail" id="2">
+          <to>
+            <item role_id="_receiver">_receiver</item>
+          </to>
+        </item>
+      </items>
+    </status>
+  </possible_status><global_actions>
+    <action>
+      <id>1</id>
+      <name>Enregistrement dans atal</name>
+      <items>
+        <item type="jump" id="1">
+          <status>3</status>
+          <set_marker_on_status>False</set_marker_on_status>
+        </item>
+      </items><triggers>
+        <trigger type="webservice" id="908482a5-47e0-4a38-888e-e9a26254d348">
+          <identifier>enregistrement_atal</identifier>
+        </trigger><trigger type="manual" id="54bfb8fd-c7bd-44b5-b0d0-ab69c2cc60ae">
+          <roles>
+            <item slug="debug" role_id="6d2c55fe2ea44e41b7f8111b93f1930a">Debug</item>
+          </roles><allow_as_mass_action>True</allow_as_mass_action>
+          <require_confirmation>False</require_confirmation>
+        </trigger>
+      </triggers>
+    </action><action>
+      <id>2</id>
+      <name>Demande refus&#233;e</name>
+      <items>
+        <item type="jump" id="1">
+          <status>7</status>
+          <set_marker_on_status>False</set_marker_on_status>
+        </item>
+      </items><triggers>
+        <trigger type="webservice" id="f4befe2c-10f1-4955-91f2-a6359b70cbdf">
+          <identifier>demande_refus&#233;e</identifier>
+        </trigger>
+      </triggers>
+    </action><action>
+      <id>3</id>
+      <name>Demande annul&#233;e</name>
+      <items>
+        <item type="jump" id="1">
+          <status>8</status>
+          <set_marker_on_status>False</set_marker_on_status>
+        </item>
+      </items><triggers>
+        <trigger type="webservice" id="1bab2877-2fa9-4f93-a592-11446677f478">
+          <identifier>demande_annul&#233;e</identifier>
+        </trigger>
+      </triggers>
+    </action>
+  </global_actions><variables>
+    <formdef>
+      <name>-</name>
+      <fields>
+        <field>
+          <type>string</type>
+          <label type="str">UUID Heure d&#233;but</label>
+          <required type="bool">True</required>
+          <varname type="str">uuid_heure_debut</varname>
+          <display_locations>
+            <item>validation</item>
+            <item>summary</item>
+          </display_locations><anonymise type="str">final</anonymise>
+          <id type="str">1</id>
+        </field><field>
+          <type>string</type>
+          <label type="str">UUID Date d&#233;but</label>
+          <required type="bool">True</required>
+          <varname type="str">uuid_date_debut</varname>
+          <display_locations>
+            <item>validation</item>
+            <item>summary</item>
+          </display_locations><anonymise type="str">final</anonymise>
+          <id type="str">2</id>
+        </field><field>
+          <type>string</type>
+          <label type="str">UUID Heure fin</label>
+          <required type="bool">True</required>
+          <varname type="str">uuid_heure_fin</varname>
+          <display_locations>
+            <item>validation</item>
+            <item>summary</item>
+          </display_locations><anonymise type="str">final</anonymise>
+          <id type="str">3</id>
+        </field><field>
+          <type>string</type>
+          <label type="str">UUID Date fin</label>
+          <required type="bool">True</required>
+          <varname type="str">uuid_date_fin</varname>
+          <display_locations>
+            <item>validation</item>
+            <item>summary</item>
+          </display_locations><anonymise type="str">final</anonymise>
+          <id type="str">4</id>
+        </field><field>
+          <type>string</type>
+          <label type="str">UUID Quantit&#233;</label>
+          <required type="bool">True</required>
+          <varname type="str">uuid_quantite</varname>
+          <display_locations>
+            <item>validation</item>
+            <item>summary</item>
+          </display_locations><anonymise type="str">final</anonymise>
+          <id type="str">5</id>
+        </field><field>
+          <type>string</type>
+          <label type="str">UUID Mat&#233;riel</label>
+          <required type="bool">True</required>
+          <varname type="str">uuid_materiel</varname>
+          <display_locations>
+            <item>validation</item>
+            <item>summary</item>
+          </display_locations><anonymise type="str">final</anonymise>
+          <id type="str">6</id>
+        </field>
+      </fields>
+    </formdef>
+  </variables><backoffice-fields>
+    <formdef>
+      <name>-</name>
+      <fields>
+        <field>
+          <type>string</type>
+          <label type="str">Compteur</label>
+          <required type="bool">True</required>
+          <varname type="str">compteur</varname>
+          <display_locations>
+            <item>summary</item>
+          </display_locations><anonymise type="str">final</anonymise>
+          <id type="str">bo60ebf4b2-7ee3-4047-8eb9-a0c8519be73c</id>
+        </field><field>
+          <type>string</type>
+          <label type="str">Date d&#233;but wf</label>
+          <required type="bool">True</required>
+          <varname type="str">wf_date_debut</varname>
+          <display_locations>
+            <item>summary</item>
+          </display_locations><anonymise type="str">final</anonymise>
+          <id type="str">bo7ddbfdb3-b427-4ead-b5a2-b8812ea1477c</id>
+        </field><field>
+          <type>string</type>
+          <label type="str">Date fin wf</label>
+          <required type="bool">True</required>
+          <varname type="str">wf_date_fin</varname>
+          <display_locations>
+            <item>summary</item>
+          </display_locations><anonymise type="str">final</anonymise>
+          <id type="str">boe5cdd6a9-3220-41b0-87fc-e44d3a7fb483</id>
+        </field><field>
+          <type>string</type>
+          <label type="str">Heure d&#233;but wf</label>
+          <required type="bool">True</required>
+          <varname type="str">wf_heure_debut</varname>
+          <display_locations>
+            <item>summary</item>
+          </display_locations><anonymise type="str">final</anonymise>
+          <id type="str">bo54d3891a-fff8-409a-a7e1-c5fcfe76dbc7</id>
+        </field><field>
+          <type>string</type>
+          <label type="str">Heure fin wf</label>
+          <required type="bool">True</required>
+          <varname type="str">wf_heure_fin</varname>
+          <display_locations>
+            <item>summary</item>
+          </display_locations><anonymise type="str">final</anonymise>
+          <id type="str">bo5f9dd008-c346-4c55-8f4a-975d7d9a89bd</id>
+        </field><field>
+          <type>string</type>
+          <label type="str">Datetime debut</label>
+          <required type="bool">True</required>
+          <varname type="str">wf_datetime_debut</varname>
+          <display_locations>
+            <item>summary</item>
+          </display_locations><anonymise type="str">final</anonymise>
+          <id type="str">bo25e2b8ee-bfae-437b-b676-c8cc6fd3515a</id>
+        </field><field>
+          <type>string</type>
+          <label type="str">Datetime fin</label>
+          <required type="bool">True</required>
+          <varname type="str">wf_datetime_fin</varname>
+          <display_locations>
+            <item>summary</item>
+          </display_locations><anonymise type="str">final</anonymise>
+          <id type="str">boc3ad1700-0693-4203-926e-e19dc292e4c2</id>
+        </field><field>
+          <type>string</type>
+          <label type="str">ID Mat&#233;riel</label>
+          <required type="bool">True</required>
+          <varname type="str">wf_id_materiel</varname>
+          <display_locations>
+            <item>summary</item>
+          </display_locations><anonymise type="str">final</anonymise>
+          <id type="str">bo6f942bcb-f179-4d3a-8627-cd6a42c5d6b8</id>
+        </field><field>
+          <type>string</type>
+          <label type="str">Quantit&#233; wf</label>
+          <required type="bool">True</required>
+          <varname type="str">wf_quantite</varname>
+          <display_locations>
+            <item>summary</item>
+          </display_locations><anonymise type="str">final</anonymise>
+          <id type="str">bo72350186-108e-4b05-b7fb-1d093218eb2c</id>
+        </field>
+      </fields>
+    </formdef>
+  </backoffice-fields>
+</workflow>

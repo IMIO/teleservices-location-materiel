@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+<block id="25" url="">
+  <name>iMio - Atal - Location de mat&#233;riel</name>
+  <slug>atal_location_de_materiel</slug>
+  <digest_template>{{location_de_materiel_var_quantite}} {{location_de_materiel_var_materiel}} du {{location_de_materiel_var_date_debut|date:"d-m-Y"}} {{location_de_materiel_var_heure_debut}} au {{location_de_materiel_var_date_fin|date:"d-m-Y"}} {{location_de_materiel_var_heure_fin}}</digest_template>
+  <category slug="imio-atal" category_id="1">iMio - Atal</category>
+  <fields>
+    <field>
+      <type>subtitle</type>
+      <label type="str">Type et quantit&#233;</label>
+      <display_locations>
+        <item>validation</item>
+        <item>summary</item>
+      </display_locations><id type="str">bf275bfb5d-4573-4c37-bcf2-882842683f25</id>
+    </field><field>
+      <type>item</type>
+      <label type="str">Mat&#233;riel</label>
+      <required type="bool">True</required>
+      <varname type="str">materiel</varname>
+      <display_locations>
+        <item>validation</item>
+        <item>summary</item>
+      </display_locations><extra_css_class type="str">grid-3-4</extra_css_class>
+      <prefill>
+        <type>none</type>
+      </prefill><anonymise type="str">no</anonymise>
+      <display_mode type="str">autocomplete</display_mode>
+      <items>
+        <item>test</item>
+        <item>test 2</item>
+        <item>test 3</item>
+      </items><data_source>
+        <type>materiel_louable</type>
+      </data_source><in_filters type="bool">False</in_filters>
+      <display_disabled_items type="bool">False</display_disabled_items>
+      <use_hint_as_first_option type="bool">True</use_hint_as_first_option>
+      <image_desktop_size type="int">150</image_desktop_size>
+      <image_mobile_size type="int">75</image_mobile_size>
+      <id type="str">bfe547b7e5-5fde-46a7-98c0-ecfaecf89adb</id>
+    </field><field>
+      <type>string</type>
+      <label type="str">Quantit&#233;</label>
+      <required type="bool">True</required>
+      <varname type="str">quantite</varname>
+      <display_locations>
+        <item>validation</item>
+        <item>summary</item>
+      </display_locations><extra_css_class type="str">grid-2-12</extra_css_class>
+      <prefill>
+        <type>none</type>
+      </prefill><anonymise type="str">final</anonymise>
+      <validation>
+        <type>digits</type>
+      </validation><id type="str">bfcf8a3792-84e5-4921-8273-02d2f615b515</id>
+    </field><field>
+      <type>subtitle</type>
+      <label type="str">Date et heure du d&#233;but de la location</label>
+      <display_locations>
+        <item>validation</item>
+        <item>summary</item>
+      </display_locations><id type="str">bf53415133-43d2-4a49-8c69-3142e57e5c3b</id>
+    </field><field>
+      <type>date</type>
+      <label type="str">Date</label>
+      <required type="bool">True</required>
+      <varname type="str">date_debut</varname>
+      <display_locations>
+        <item>validation</item>
+        <item>summary</item>
+      </display_locations><extra_css_class type="str">grid-1-4</extra_css_class>
+      <prefill>
+        <type>none</type>
+      </prefill><anonymise type="str">final</anonymise>
+      <minimum_is_future type="bool">True</minimum_is_future>
+      <date_in_the_past type="bool">False</date_in_the_past>
+      <date_can_be_today type="bool">False</date_can_be_today>
+      <id type="str">bf9e9961ca-fcbf-4380-805c-312c6fcfb89a</id>
+    </field><field>
+      <type>string</type>
+      <label type="str">Heure</label>
+      <required type="bool">True</required>
+      <hint type="str">&lt;p&gt;Format 23:59&lt;/p&gt;</hint>
+      <varname type="str">heure_debut</varname>
+      <display_locations>
+        <item>validation</item>
+        <item>summary</item>
+      </display_locations><extra_css_class type="str">grid-2-12</extra_css_class>
+      <prefill>
+        <locked>False</locked>
+        <type>string</type>
+        <value>00:00</value>
+      </prefill><anonymise type="str">final</anonymise>
+      <validation>
+        <error_message>Erreur lors de l'encodage de l'heure de d&#233;but</error_message>
+        <type>time</type>
+      </validation><id type="str">bf5889f632-b418-4ba4-b962-18565ff16cba</id>
+    </field><field>
+      <type>subtitle</type>
+      <label type="str">Date et heure de fin de la location</label>
+      <display_locations>
+        <item>validation</item>
+        <item>summary</item>
+      </display_locations><id type="str">bf738448a9-6949-49f4-9b72-77e06a15dc25</id>
+    </field><field>
+      <type>date</type>
+      <label type="str">Date</label>
+      <required type="bool">True</required>
+      <varname type="str">date_fin</varname>
+      <display_locations>
+        <item>validation</item>
+        <item>summary</item>
+      </display_locations><extra_css_class type="str">grid-1-4</extra_css_class>
+      <prefill>
+        <type>none</type>
+      </prefill><anonymise type="str">final</anonymise>
+      <minimum_is_future type="bool">True</minimum_is_future>
+      <date_in_the_past type="bool">False</date_in_the_past>
+      <date_can_be_today type="bool">False</date_can_be_today>
+      <id type="str">bf59d32f1c-c470-45f3-937d-ea17fae65c2c</id>
+    </field><field>
+      <type>string</type>
+      <label type="str">Heure</label>
+      <required type="bool">True</required>
+      <hint type="str">&lt;p&gt;Format 23:59&lt;/p&gt;</hint>
+      <varname type="str">heure_fin</varname>
+      <display_locations>
+        <item>validation</item>
+        <item>summary</item>
+      </display_locations><extra_css_class type="str">grid-2-12</extra_css_class>
+      <prefill>
+        <locked>False</locked>
+        <type>string</type>
+        <value>00:00</value>
+      </prefill><anonymise type="str">final</anonymise>
+      <validation>
+        <error_message>Erreur lors de l'encodage de l'heure de fin</error_message>
+        <type>time</type>
+      </validation><id type="str">bfd1d02a0d-b792-436e-be3c-f5eccacad773</id>
+    </field>
+  </fields>
+</block>

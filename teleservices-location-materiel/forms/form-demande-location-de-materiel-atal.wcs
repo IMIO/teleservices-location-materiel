@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<formdef id="83" url="">
+  <name>Location de mat&#233;riel</name>
+  <url_name>demande-location-de-materiel-atal</url_name>
+  <submission_user_association>any</submission_user_association>
+  <discussion>false</discussion>
+  <detailed_emails>true</detailed_emails>
+  <disabled>true</disabled>
+  <only_allow_one>false</only_allow_one>
+  <enable_tracking_codes>false</enable_tracking_codes>
+  <confirmation>true</confirmation>
+  <always_advertise>false</always_advertise>
+  <has_captcha>false</has_captcha>
+  <skip_from_360_view>false</skip_from_360_view>
+  <workflow slug="location-de-materiel" workflow_id="43">iMio - Atal - Location de mat&#233;riel</workflow>
+  <fields>
+    <field>
+      <type>block</type>
+      <label type="str">Location de mat&#233;riel</label>
+      <required type="bool">True</required>
+      <varname type="str">blc_materiel</varname>
+      <display_locations>
+        <item>validation</item>
+        <item>summary</item>
+      </display_locations><anonymise type="str">final</anonymise>
+      <default_items_count type="int">1</default_items_count>
+      <max_items type="int">50</max_items>
+      <add_element_label type="str">Ajouter un autre mat&#233;riel</add_element_label>
+      <label_display type="str">subtitle</label_display>
+      <remove_button type="bool">True</remove_button>
+      <block_slug type="str">atal_location_de_materiel</block_slug>
+      <id type="str">1</id>
+    </field>
+  </fields><user-roles>
+    <role slug="citoyen-test" role_id="45d1eb0a941f44f68289eb1586be448e">Citoyen (test)</role>
+  </user-roles><options>
+    <option varname="id_materiel">blc_materiel_raw</option>
+    <option varname="uuid_date_debut">bf59d32f1c-c470-45f3-937d-ea17fae65c2c</option>
+    <option varname="uuid_date_fin">bf9e9961ca-fcbf-4380-805c-312c6fcfb89a</option>
+    <option varname="uuid_heure_debut">bf5889f632-b418-4ba4-b962-18565ff16cba</option>
+    <option varname="uuid_heure_fin">bfd1d02a0d-b792-436e-be3c-f5eccacad773</option>
+    <option varname="uuid_materiel">bfe547b7e5-5fde-46a7-98c0-ecfaecf89adb</option>
+    <option varname="uuid_quantite">bfcf8a3792-84e5-4921-8273-02d2f615b515</option>
+  </options><custom_views />
+  <geolocations />
+  <management_sidebar_items>
+    <item>__default__</item>
+  </management_sidebar_items>
+</formdef>
